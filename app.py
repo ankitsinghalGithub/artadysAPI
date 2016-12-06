@@ -12,6 +12,7 @@ from nltk import FreqDist
 import json
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
+import pastTweetsExtract
 
 
 
@@ -126,8 +127,38 @@ def wordcount():
                 #db.session.commit()
             except:
                 errors.append("")
+
+            #print (results)
     return render_template('wordcount.html', errors=errors, results=results)
 
+@app.route('/pasttweets', methods=['GET', 'POST'])
+def pasttweets():
+    errors = []
+    results =()
+    keyword=''
+    #print (request.method)
+    if request.method == "POST":
+        # get url that the person has entered
+        try:
+            #print ("inside")
+            keyword = request.form['url']
+            #print (keyword)
+        except:
+            errors.append(
+                "Unable to get key word. Please make sure it's valid and try again."
+            )
+            return render_template('tweetsSent.html', errors=errors)
+
+        if keyword:
+            #print ("keyword:", keyword)
+            try:
+                results = pastTweetsExtract.getInfo(keyword)
+                #print  (results)
+            except:
+                errors=["Unable to get key word. Please make sure it's valid and try again."]
+                return render_template('pasttweets.html', errors=errors)
+
+    return render_template('pasttweets.html', errors=errors, results=results, keyword=keyword)
 
 
 if __name__ == '__main__':
