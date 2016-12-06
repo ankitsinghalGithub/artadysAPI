@@ -13,6 +13,7 @@ import json
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 import pastTweetsExtract
+import pasttweetSent
 
 
 
@@ -183,9 +184,7 @@ def sentiment():
             try:
                 url1 = "http://www.sentiment140.com/api/classify?text=" + keyword
                 r = requests.get(url1)
-                print ("ddddddddddddddddd:", r)
                 polarity = json.loads(r.text)['results']['polarity']
-                print (polarity)
                 if (polarity==0):
                     results = 'Negative'
                 elif (polarity == 2):
@@ -198,6 +197,83 @@ def sentiment():
                 return render_template('sentiment.html', errors=errors)
 
     return render_template('sentiment.html', errors=errors, results=results, keyword=keyword)
+
+
+
+@app.route('/mapTest', methods=['GET', 'POST'])
+def maps():
+    locations = [
+    -31.563910,-33.718234,-33.727111,
+    -33.848588,-33.851702,
+    -34.671264,-35.304724,
+    -36.817685,-36.828611,
+    -37.750000,-37.759859,
+    -37.765015,-37.770104,
+    -37.773700,-37.774785,
+    -37.819616,-38.330766,
+    -39.927193,-41.330162,
+    -42.734358,-42.734358,
+    -42.735258,-43.999792,
+    ]
+
+    locations1= [
+    147.154312,150.363181,
+    150.371124,151.209834,
+    151.216968,150.863657,
+    148.662905,175.699196,
+    175.790222,145.116667,
+    145.128708,145.133858,
+    145.143299,145.145187,
+    145.137978,144.968119,
+    144.695692,175.053218,
+    174.865694,147.439506,
+    147.501315,147.438000,
+    170.463352
+    ]
+
+    return render_template('googleMapTest.html', lat=locations, lng=locations1)
+
+
+@app.route('/heatMapTest', methods=['GET', 'POST'])
+def heatMapTest():
+    return render_template('heatMapTest.html')
+
+
+@app.route('/tweetsSent', methods=['GET', 'POST'])
+def tweetsSent():
+    errors = []
+    results =()
+    keyword=''
+    locations=[]
+    locations1=[]
+    labels=''
+    #print (request.method)
+    if request.method == "POST":
+        # get url that the person has entered
+        try:
+            #print ("inside")
+            keyword = request.form['url']
+            #print (keyword)
+        except:
+            errors.append(
+                "Unable to get key word. Please make sure it's valid and try again."
+            )
+            return render_template('tweetsSent.html', errors=errors)
+        if keyword:
+            try:
+                results = pasttweetSent.getInfo(keyword)
+                for x in results:
+                    locations.append(x[1]['lat'])
+                    locations1.append(x[1]['lng'])
+                    labels=labels + x[-1]
+                    
+            except:
+                errors=["Unable to get key word. Please make sure it's valid and try again."]
+                return render_template('tweetsSent.html', errors=errors)
+
+
+    return render_template('tweetsSent.html', errors=errors, results=results, keyword=keyword,lat=locations, lng=locations1, lab=labels)
+
 
 
 if __name__ == '__main__':
