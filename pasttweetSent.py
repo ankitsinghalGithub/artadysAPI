@@ -71,7 +71,7 @@ def getInfo(word):
 			if (polarity==0):
 				results = 'N'
 			elif (polarity == 2):
-				results = 'L'
+				results = 'O'
 			elif (polarity ==4):
 				results = "P"
 

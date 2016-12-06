@@ -14,6 +14,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 import pastTweetsExtract
 import pasttweetSent
+import emotion
+import personality
 
 
 
@@ -273,6 +275,47 @@ def tweetsSent():
 
 
     return render_template('tweetsSent.html', errors=errors, results=results, keyword=keyword,lat=locations, lng=locations1, lab=labels)
+
+
+@app.route('/getAttitude', methods=['GET', 'POST'])
+def getAttitude():
+    errors = []
+    remotion =[]
+    rpersonality = []
+    keyword=''
+    results=''
+    
+    #print (request.method)
+    if request.method == "POST":
+        # get url that the person has entered
+        try:
+            #print ("inside")
+            keyword = request.form['url']
+            #print (keyword)
+        except:
+            errors.append(
+                "Unable to get key word. Please make sure it's valid and try again."
+            )
+            return render_template('getAttitude.html', errors=errors)
+        if keyword:
+            try:
+                #print (keyword)
+                getemotion = emotion.getEmotion(keyword)
+                remotion = list(getemotion.items())
+                #print (remotion)
+
+                getpersonality = personality.getPersonality(keyword)
+                rpersonality = list(getpersonality.items())
+                #print (rpersonality)
+
+                results='YES'
+                    
+            except:
+                errors=["Unable to get key word. Please make sure it's valid and try again."]
+                return render_template('getAttitude.html', errors=errors)
+
+
+    return render_template('getAttitude.html', errors=errors, emotion=remotion, keyword=keyword, personality=rpersonality, results=results)
 
 
 
