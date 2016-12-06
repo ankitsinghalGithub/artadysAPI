@@ -160,6 +160,45 @@ def pasttweets():
 
     return render_template('pasttweets.html', errors=errors, results=results, keyword=keyword)
 
+@app.route('/sentiment', methods=['GET', 'POST'])
+def sentiment():
+    errors = []
+    results =''
+    keyword=''
+    #print (request.method)
+    if request.method == "POST":
+        # get url that the person has entered
+        try:
+            #print ("inside")
+            keyword = request.form['url']
+            #print (keyword)
+        except:
+            errors.append(
+                "Unable to get sentence. Please make sure it's valid and try again."
+            )
+            return render_template('sentiment.html', errors=errors)
+
+        if keyword:
+            #print ("keyword:", keyword)
+            try:
+                url1 = "http://www.sentiment140.com/api/classify?text=" + keyword
+                r = requests.get(url1)
+                print ("ddddddddddddddddd:", r)
+                polarity = json.loads(r.text)['results']['polarity']
+                print (polarity)
+                if (polarity==0):
+                    results = 'Negative'
+                elif (polarity == 2):
+                    results = 'Neutral'
+                elif (polarity ==4):
+                    results = "Positive"
+                #print  (results)
+            except:
+                errors=["Unable to get sentence. Please make sure it's valid and try again."]
+                return render_template('sentiment.html', errors=errors)
+
+    return render_template('sentiment.html', errors=errors, results=results, keyword=keyword)
+
 
 if __name__ == '__main__':
     app.run()
