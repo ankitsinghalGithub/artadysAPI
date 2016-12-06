@@ -32,6 +32,10 @@ def getEmotion(text):
 
     def scores(word_features,lexicon):
         scores = pandas.merge(word_features,lexicon,how='inner', on=['WORDS'])
+        
+        if len(scores)==0:
+            scores.loc[0]= ["NA",1,0,0,0,0,0,0,0,0,0,0]
+
         return scores
 
     def emotionScoresWithDuplicates(scores):
@@ -79,5 +83,5 @@ def getEmotion(text):
     results = {"HAPPY": list(fs['HAP-AVG'])[0], "ANGER": list(fs['ANG-AVG'])[0], "SAD": list(fs['SAD-AVG'])[0], "FEAR":list(fs['FEA-AVG'])[0], "DISTRESS":list(fs['DIS-AVG'])[0]}
     return results
 
-#text1 = "He is very bad and not good. I am good and confident. Very poor girl"
+#text1 = "He is"
 #print (getEmotion(text1))

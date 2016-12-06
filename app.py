@@ -39,17 +39,21 @@ def hello_name(name):
 def wordcountAPI():
     errors = []
     results = {}
+    url=''
 
     if 'url' in request.args:
-         url = request.args['url']
-         #print (url)
+        url = request.args['url']
+        #print (url)
+    
+
+    #print (request.method)
     if request.method == "GET":
         # get url that the person has entered
         try:
         	#print ("1")
             #url = urlParse
 	        r = requests.get(url)
-	        #print ("2")
+	        #print ("2", r)
         except:
             errors.append(
                 "Unable to get URL. Please make sure it's valid and try again."
@@ -78,7 +82,7 @@ def wordcountAPI():
             no_stop = no_stop_words_count0 + no_stop_words_count1 + no_stop_words_count2
             rs1 =list(map(lambda x: {'word': x[0], 'count':x[1] }, no_stop))
 
-            #print (rs1)
+            print (rs1)
 
     return  jsonify(rs1)
 
@@ -318,6 +322,47 @@ def getAttitude():
     return render_template('getAttitude.html', errors=errors, emotion=remotion, keyword=keyword, personality=rpersonality, results=results)
 
 
+
+@app.route('/getAttitudeAPI', methods=['GET', 'POST'])
+def getAttitudeAPI():
+    errors = []
+    remotion =[]
+    rpersonality = []
+    keyword=''
+    results=[]
+
+    if 'url' in request.args:
+         url = request.args['url']
+         
+    if request.method == "GET":
+        # get url that the person has entered
+        try:
+            
+            keyword = url
+            
+        except:
+            errors.append(
+                "Unable to get key word. Please make sure it's valid and try again."
+            )
+            return jsonify({'Status':'error'})
+        if keyword:
+            try:
+                #print ("$$$$$$$$$$$$$$$$$$",keyword)
+                getemotion = {'emotion score':emotion.getEmotion(keyword)}
+                #remotion = list(getemotion.items())
+                getpersonality = {'personality score': personality.getPersonality(keyword)}
+                #rpersonality = list(getpersonality.items())
+                results.append(getemotion)
+                #print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22", results)
+                results.append(getpersonality)
+                #print ("results:", results)
+                    
+            except:
+                errors=["Unable to get key word. Please make sure it's valid and try again."]
+                return jsonify({'Status':'error'})
+
+
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run()
