@@ -190,13 +190,7 @@ def tweetsSentapi():
             return jsonify([{'error': errors}])
         if keyword:
             try:
-                results = pasttweetSent.getInfo(keyword)
-                '''
-                for x in results:
-                    locations.append(x[1]['lat'])
-                    locations1.append(x[1]['lng'])
-                    labels=labels + x[-1]
-                 '''   
+                results = pasttweetSent.getInfo(keyword)  
             except:
                 errors=["Unable to get key word. Please make sure it's valid and try again."]
                 return jsonify([{'error': errors}])
