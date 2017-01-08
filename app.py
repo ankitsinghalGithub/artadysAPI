@@ -58,7 +58,7 @@ def wordcountAPI():
             errors.append(
                 "Unable to get URL. Please make sure it's valid and try again."
             )
-            return render_template('wordcount.html', errors=errors)
+            return jsonify([{'error':errors}])
         if r:
             # text processing
             #print ("3")
@@ -82,108 +82,66 @@ def wordcountAPI():
             no_stop = no_stop_words_count0 + no_stop_words_count1 + no_stop_words_count2
             rs1 =list(map(lambda x: {'word': x[0], 'count':x[1] }, no_stop))
 
-            print (rs1)
+            #print (rs1)
 
     return  jsonify(rs1)
 
 
-@app.route('/wordcount', methods=['GET', 'POST'])
-def wordcount():
-    errors = []
-    results = {}
-    if request.method == "POST":
-        # get url that the person has entered
-        try:
-            url = request.form['url']
-            r = requests.get(url)
-        except:
-            errors.append(
-                "Unable to get URL. Please make sure it's valid and try again."
-            )
-            return render_template('wordcount.html', errors=errors)
-        if r:
-            # text processing
-            
-            raw = BeautifulSoup(r.text, 'html.parser').get_text()
-            nltk.data.path.append('./nltk_data/')  # set the path
-            tokens = nltk.word_tokenize(raw)
-            text = nltk.Text(tokens)
-            
-            # remove punctuation, count raw words
-            nonPunct = re.compile('.*[A-Za-z].*')
-            raw_words = [w for w in text if nonPunct.match(w)]
-            raw_word_count = Counter(raw_words)
-            # stop words
-            
-            no_stop_words = [w for w in raw_words if w.lower() not in stops]
-            no_stop_words_count = Counter(no_stop_words)
-            # save the results
-            
-            results = sorted(
-                no_stop_words_count.items(),
-                key=operator.itemgetter(1),
-                reverse=True
-            )
-            try:
-                result = Result(
-                    url=url,
-                    result_all=raw_word_count,
-                    result_no_stop_words=no_stop_words_count
-                )
-                #db.session.add(result)
-                #db.session.commit()
-            except:
-                errors.append("")
 
-            #print (results)
-    return render_template('wordcount.html', errors=errors, results=results)
-
-@app.route('/pasttweets', methods=['GET', 'POST'])
-def pasttweets():
+@app.route('/pasttweetsapi', methods=['GET', 'POST'])
+def pasttweetsapi():
     errors = []
     results =()
     keyword=''
     #print (request.method)
-    if request.method == "POST":
+    if request.method == "GET":
         # get url that the person has entered
         try:
             #print ("inside")
-            keyword = request.form['url']
+            #keyword = request.form['key']
+            if 'key' in request.args:
+                #print ('key')
+                keyword = request.args['key']
+                #keyword =requests.get(key)
             #print (keyword)
         except:
             errors.append(
                 "Unable to get key word. Please make sure it's valid and try again."
             )
-            return render_template('tweetsSent.html', errors=errors)
+            return jsonify([{'error': errors}])
 
         if keyword:
             #print ("keyword:", keyword)
             try:
                 results = pastTweetsExtract.getInfo(keyword)
-                #print  (results)
+                #results =list(map(lambda x: {'created': x[0], 'tweet':x[1] }, results))
+                #print  ("app.py : ",results)
             except:
                 errors=["Unable to get key word. Please make sure it's valid and try again."]
-                return render_template('pasttweets.html', errors=errors)
+                return jsonify([{'error': errors}])
 
-    return render_template('pasttweets.html', errors=errors, results=results, keyword=keyword)
+    return jsonify(results)
 
-@app.route('/sentiment', methods=['GET', 'POST'])
-def sentiment():
+@app.route('/sentimentapi', methods=['GET', 'POST'])
+def sentimentapi():
     errors = []
     results =''
     keyword=''
     #print (request.method)
-    if request.method == "POST":
+    if request.method == "GET":
         # get url that the person has entered
         try:
             #print ("inside")
-            keyword = request.form['url']
-            #print (keyword)
+            if 'sent' in request.args:
+                
+                keyword = request.args['sent']
+                #keyword =requests.get(key)
+                #print (keyword)
         except:
             errors.append(
                 "Unable to get sentence. Please make sure it's valid and try again."
             )
-            return render_template('sentiment.html', errors=errors)
+            return jsonify([{'error': errors}])
 
         if keyword:
             #print ("keyword:", keyword)
@@ -200,53 +158,13 @@ def sentiment():
                 #print  (results)
             except:
                 errors=["Unable to get sentence. Please make sure it's valid and try again."]
-                return render_template('sentiment.html', errors=errors)
+                return jsonify([{'error': errors}])
 
-    return render_template('sentiment.html', errors=errors, results=results, keyword=keyword)
-
-
-
-@app.route('/mapTest', methods=['GET', 'POST'])
-def maps():
-    locations = [
-    -31.563910,-33.718234,-33.727111,
-    -33.848588,-33.851702,
-    -34.671264,-35.304724,
-    -36.817685,-36.828611,
-    -37.750000,-37.759859,
-    -37.765015,-37.770104,
-    -37.773700,-37.774785,
-    -37.819616,-38.330766,
-    -39.927193,-41.330162,
-    -42.734358,-42.734358,
-    -42.735258,-43.999792,
-    ]
-
-    locations1= [
-    147.154312,150.363181,
-    150.371124,151.209834,
-    151.216968,150.863657,
-    148.662905,175.699196,
-    175.790222,145.116667,
-    145.128708,145.133858,
-    145.143299,145.145187,
-    145.137978,144.968119,
-    144.695692,175.053218,
-    174.865694,147.439506,
-    147.501315,147.438000,
-    170.463352
-    ]
-
-    return render_template('googleMapTest.html', lat=locations, lng=locations1)
+    return jsonify([{'text':keyword, 'polarity':results, 'powered by':'Sentiment140'}])
 
 
-@app.route('/heatMapTest', methods=['GET', 'POST'])
-def heatMapTest():
-    return render_template('heatMapTest.html')
-
-
-@app.route('/tweetsSent', methods=['GET', 'POST'])
-def tweetsSent():
+@app.route('/tweetsSentapi', methods=['GET', 'POST'])
+def tweetsSentapi():
     errors = []
     results =()
     keyword=''
@@ -254,72 +172,37 @@ def tweetsSent():
     locations1=[]
     labels=''
     #print (request.method)
-    if request.method == "POST":
+    if request.method == "GET":
         # get url that the person has entered
         try:
             #print ("inside")
-            keyword = request.form['url']
+            #keyword = request.form['url']
+            if 'key' in request.args:
+                #print ('key')
+                keyword = request.args['key']
+                #keyword =requests.get(key)
+            #print (keyword)
             #print (keyword)
         except:
             errors.append(
                 "Unable to get key word. Please make sure it's valid and try again."
             )
-            return render_template('tweetsSent.html', errors=errors)
+            return jsonify([{'error': errors}])
         if keyword:
             try:
                 results = pasttweetSent.getInfo(keyword)
+                '''
                 for x in results:
                     locations.append(x[1]['lat'])
                     locations1.append(x[1]['lng'])
                     labels=labels + x[-1]
-                    
+                 '''   
             except:
                 errors=["Unable to get key word. Please make sure it's valid and try again."]
-                return render_template('tweetsSent.html', errors=errors)
+                return jsonify([{'error': errors}])
 
 
-    return render_template('tweetsSent.html', errors=errors, results=results, keyword=keyword,lat=locations, lng=locations1, lab=labels)
-
-
-@app.route('/getAttitude', methods=['GET', 'POST'])
-def getAttitude():
-    errors = []
-    remotion =[]
-    rpersonality = []
-    keyword=''
-    results=''
-    
-    #print (request.method)
-    if request.method == "POST":
-        # get url that the person has entered
-        try:
-            #print ("inside")
-            keyword = request.form['url']
-            #print (keyword)
-        except:
-            errors.append(
-                "Unable to get key word. Please make sure it's valid and try again."
-            )
-            return render_template('getAttitude.html', errors=errors)
-        if keyword:
-            try:
-                #print (keyword)
-                getemotion = emotion.getEmotion(keyword)
-                remotion = list(getemotion.items())
-                #print (remotion)
-
-                getpersonality = personality.getPersonality(keyword)
-                rpersonality = list(getpersonality.items())
-                #print (rpersonality)
-
-                results='YES'
-                    
-            except:
-                errors=["Unable to get key word. Please make sure it's valid and try again."]
-                return render_template('getAttitude.html', errors=errors)
-
-
-    return render_template('getAttitude.html', errors=errors, emotion=remotion, keyword=keyword, personality=rpersonality, results=results)
+    return jsonify(results)
 
 
 
@@ -330,28 +213,29 @@ def getAttitudeAPI():
     rpersonality = []
     keyword=''
     results=[]
+    text=''
 
-    if 'url' in request.args:
-         url = request.args['url']
+    
          
     if request.method == "GET":
         # get url that the person has entered
         try:
-            
-            keyword = url
+            if 'text' in request.args:
+                text = request.args['text']
             
         except:
             errors.append(
                 "Unable to get key word. Please make sure it's valid and try again."
             )
             return jsonify({'Status':'error'})
-        if keyword:
+        if text:
             try:
                 #print ("$$$$$$$$$$$$$$$$$$",keyword)
-                getemotion = {'emotion score':emotion.getEmotion(keyword)}
+                getemotion = {'emotion score':emotion.getEmotion(text)}
                 #remotion = list(getemotion.items())
-                getpersonality = {'personality score': personality.getPersonality(keyword)}
+                getpersonality = {'personality score': personality.getPersonality(text)}
                 #rpersonality = list(getpersonality.items())
+                results.append({'text':text})
                 results.append(getemotion)
                 #print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22", results)
                 results.append(getpersonality)

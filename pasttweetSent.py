@@ -35,9 +35,12 @@ def getInfo(word):
 			#print ("2:",c, tweet)
 			break
 		else:
-			d = tweet.created_at
-			t = tweet.text.encode('utf-8')
+			d = tweet.created_at.strftime("%Y-%m-%d  %H:%M:%S.%f")
+			t = str(tweet.text.encode('utf-8'))
+
+			'''
 			l = tweet.author.location
+
 			print (d,t,l)
 			print ("ddd:",l)
 			if (l):
@@ -61,7 +64,9 @@ def getInfo(word):
 			cord= t1['results'][0]['geometry']['location']
 			#print (cord)
 			#print (t)
-			url1 = "http://www.sentiment140.com/api/classify?text=" + str(t)
+			'''
+
+			url1 = "http://www.sentiment140.com/api/classify?text=" + t
 			#print (url1)
 			r = requests.get(url1)
 			#print (r)
@@ -69,13 +74,14 @@ def getInfo(word):
 			results=''
 			#print (polarity)
 			if (polarity==0):
-				results = 'N'
+				results = 'Negative'
 			elif (polarity == 2):
-				results = 'O'
+				results = 'Neutral'
 			elif (polarity ==4):
-				results = "P"
+				results = "Positive"
 
-			j=(d,cord,t,l, results)
+			#j=(d,cord,t,l, results)
+			j = {'created at':d, 'tweet':t,'polarity':results}
 			tweetsList.append(j)
 			c=c-1
 	#print (tweetsList)
