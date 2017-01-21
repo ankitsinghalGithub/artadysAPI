@@ -81,7 +81,7 @@ def getInfo(word):
 				results = "Positive"
 
 			#j=(d,cord,t,l, results)
-			j = {'created at':d, 'tweet':t,'polarity':results}
+			j = {'created-at':d, 'tweet':t,'polarity':results}
 			tweetsList.append(j)
 			c=c-1
 	#print (tweetsList)

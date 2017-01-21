@@ -118,9 +118,9 @@ def pasttweetsapi():
                 #print  ("app.py : ",results)
             except:
                 errors=["Unable to get key word. Please make sure it's valid and try again."]
-                return jsonify([{'error': errors}])
+                return jsonify({"results":[{'error': errors}]})
 
-    return jsonify(results)
+    return jsonify({"results":results})
 
 @app.route('/sentimentapi', methods=['GET', 'POST'])
 def sentimentapi():
@@ -225,14 +225,17 @@ def getAttitudeAPI():
         if text:
             try:
                 #print ("$$$$$$$$$$$$$$$$$$",keyword)
-                getemotion = {'emotion score':emotion.getEmotion(text)}
+                getemotion = emotion.getEmotion(text)
+                #print ("emotion",getemotion)
                 #remotion = list(getemotion.items())
-                getpersonality = {'personality score': personality.getPersonality(text)}
+                getpersonality = personality.getPersonality(text)
                 #rpersonality = list(getpersonality.items())
-                results.append({'text':text})
-                results.append(getemotion)
+                #print ('personality', getpersonality)
+                results.append({'text':text,'emotion score':getemotion,'personality score':getpersonality})
+                #print (results)
+                #results.append(getemotion)
                 #print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22", results)
-                results.append(getpersonality)
+                #results.append(getpersonality)
                 #print ("results:", results)
                     
             except:

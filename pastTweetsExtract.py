@@ -29,7 +29,7 @@ def getInfo(word):
 			break
 		else:
 			#j = ("date":tweet.created_at, "tweet": tweet.text.encode('utf-8'))
-			j = {'created':tweet.created_at.strftime("%Y-%m-%d_%H:%M:%S.%f"), 'tweet':str(tweet.text.encode('utf-8'))}
+			j = {'created_at':tweet.created_at.strftime("%Y-%m-%d_%H:%M:%S.%f"), 'tweet':str(tweet.text.encode('utf-8'))}
 			#print ('j',j)
 			tweetsList.append(j)
 			#print (j)
