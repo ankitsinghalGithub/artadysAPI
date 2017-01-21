@@ -160,7 +160,7 @@ def sentimentapi():
                 errors=["Unable to get sentence. Please make sure it's valid and try again."]
                 return jsonify([{'error': errors}])
 
-    return jsonify([{'text':keyword, 'polarity':results, 'powered by':'Sentiment140'}])
+    return jsonify({"results":[{'text':keyword, 'polarity':results, 'powered by':'Sentiment140'}]})
 
 
 @app.route('/tweetsSentapi', methods=['GET', 'POST'])
@@ -196,7 +196,7 @@ def tweetsSentapi():
                 return jsonify([{'error': errors}])
 
 
-    return jsonify(results)
+    return jsonify({"results":results})
 
 
 
@@ -243,7 +243,7 @@ def getAttitudeAPI():
                 return jsonify({'Status':'error'})
 
 
-    return jsonify(results)
+    return jsonify({"results":results})
 
 if __name__ == '__main__':
     app.run()
