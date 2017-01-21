@@ -231,7 +231,7 @@ def getAttitudeAPI():
                 getpersonality = personality.getPersonality(text)
                 #rpersonality = list(getpersonality.items())
                 #print ('personality', getpersonality)
-                results.append({'text':text,'emotion score':getemotion,'personality score':getpersonality})
+                results.append({'text':text,'emotion_score':getemotion,'personality_score':getpersonality})
                 #print (results)
                 #results.append(getemotion)
                 #print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22", results)
