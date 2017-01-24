@@ -74,13 +74,13 @@ def getEmotion(text):
         #data_result.to_csv(output_filename, sep = ',', encoding='utf-8', index=False)
 
     
-    header = ["HAPPY", "ANGER", "SAD", "FEAR", "DISTRESS"]
+    header = ["HAPPY", "ANGER", "SAD", "FEAR", "DISGUST"]
 
     #finalScores_E = (emotionScoresWithDuplicates( scores(wordcount(tokenize(text)),emotion_lexicon) ).tail(1).values).tolist()
     finalScores_E = emotionScoresWithDuplicates( scores(wordcount(tokenize(text)),emotion_lexicon) )
 
     fs= finalScores_E[-1:]
-    results = {"HAPPY": list(fs['HAP-AVG'])[0], "ANGER": list(fs['ANG-AVG'])[0], "SAD": list(fs['SAD-AVG'])[0], "FEAR":list(fs['FEA-AVG'])[0], "DISTRESS":list(fs['DIS-AVG'])[0]}
+    results = {"HAPPY": list(fs['HAP-AVG'])[0], "ANGER": list(fs['ANG-AVG'])[0], "SAD": list(fs['SAD-AVG'])[0], "FEAR":list(fs['FEA-AVG'])[0], "DISGUST":list(fs['DIS-AVG'])[0]}
     return results
 
 #text1 = "He is"
