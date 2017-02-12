@@ -258,7 +258,7 @@ def getConceptAPI():
 
     if 'url' in request.args:
         url1 = request.args['url']
-        print (url1)
+        #print (url1)
     try:
         
         alchemy_language = AlchemyLanguageV1(api_key='cf58ea656e04426e98c30b9b6fca569b7690d17f')
