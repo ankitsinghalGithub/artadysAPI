@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 import time
 
 def getEmotion(text):
-    
+
     nltk.data.path.append('./nltk_data/')  # set the path
     emotion_lexicon = pandas.read_csv("data_emotions_words_list.csv")
     emotion_lexicon.columns = ["WORDS", "HAP-AVG", "HAP-SD", "ANG-AVG", "ANG-SD", "SAD-AVG", "SAD-SD", "FEA-AVG", "FEA-SD", "DIS-AVG", "DIS-SD"]
@@ -32,14 +32,14 @@ def getEmotion(text):
 
     def scores(word_features,lexicon):
         scores = pandas.merge(word_features,lexicon,how='inner', on=['WORDS'])
-        
+
         if len(scores)==0:
             scores.loc[0]= ["NA",1,0,0,0,0,0,0,0,0,0,0]
 
         return scores
 
     def emotionScoresWithDuplicates(scores):
-   
+
         data_result = scores
         data_result['HAP-AVG'] *= data_result['COUNT']
         data_result['ANG-AVG'] *= data_result['COUNT']
@@ -73,7 +73,7 @@ def getEmotion(text):
         #output_filename = "emotionalScore_" + input_filename + ".csv"
         #data_result.to_csv(output_filename, sep = ',', encoding='utf-8', index=False)
 
-    
+
     header = ["HAPPY", "ANGER", "SAD", "FEAR", "DISGUST"]
 
     #finalScores_E = (emotionScoresWithDuplicates( scores(wordcount(tokenize(text)),emotion_lexicon) ).tail(1).values).tolist()
@@ -81,6 +81,8 @@ def getEmotion(text):
 
     fs= finalScores_E[-1:]
     results = {"HAPPY": list(fs['HAP-AVG'])[0], "ANGER": list(fs['ANG-AVG'])[0], "SAD": list(fs['SAD-AVG'])[0], "FEAR":list(fs['FEA-AVG'])[0], "DISGUST":list(fs['DIS-AVG'])[0]}
+    #results = [['Behaviour', 'Score'],["HAPPY", list(fs['HAP-AVG'])[0]], ["ANGER", list(fs['ANG-AVG'])[0]], ["SAD", list(fs['SAD-AVG'])[0]], ["FEAR",list(fs['FEA-AVG'])[0]], ["DISGUST",list(fs['DIS-AVG'])[0]] ]
+
     return results
 
 #text1 = "He is"

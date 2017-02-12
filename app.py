@@ -16,6 +16,7 @@ import pastTweetsExtract
 import pasttweetSent
 import emotion
 import personality
+from watson_developer_cloud import AlchemyLanguageV1
 
 
 
@@ -44,7 +45,7 @@ def wordcountAPI():
     if 'url' in request.args:
         url = request.args['url']
         #print (url)
-    
+
 
     #print (request.method)
     if request.method == "GET":
@@ -133,7 +134,7 @@ def sentimentapi():
         try:
             #print ("inside")
             if 'sent' in request.args:
-                
+
                 keyword = request.args['sent']
                 #keyword =requests.get(key)
                 #print (keyword)
@@ -190,7 +191,7 @@ def tweetsSentapi():
             return jsonify([{'error': errors}])
         if keyword:
             try:
-                results = pasttweetSent.getInfo(keyword)  
+                results = pasttweetSent.getInfo(keyword)
             except:
                 errors=["Unable to get key word. Please make sure it's valid and try again."]
                 return jsonify([{'error': errors}])
@@ -209,14 +210,14 @@ def getAttitudeAPI():
     results=[]
     text=''
 
-    
-         
+
+
     if request.method == "GET":
         # get url that the person has entered
         try:
             if 'text' in request.args:
                 text = request.args['text']
-            
+
         except:
             errors.append(
                 "Unable to get key word. Please make sure it's valid and try again."
@@ -224,7 +225,7 @@ def getAttitudeAPI():
             return jsonify({'Status':'error'})
         if text:
             try:
-                #print ("$$$$$$$$$$$$$$$$$$",keyword)
+                #print ("$$$$$$$$$$$$$$$$$$",text)
                 getemotion = emotion.getEmotion(text)
                 #print ("emotion",getemotion)
                 #remotion = list(getemotion.items())
@@ -237,13 +238,43 @@ def getAttitudeAPI():
                 #print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22", results)
                 #results.append(getpersonality)
                 #print ("results:", results)
-                    
+                results=getemotion
+
             except:
                 errors=["Unable to get key word. Please make sure it's valid and try again."]
                 return jsonify({'Status':'error'})
 
-
+    #print ("%%%%%%%%%%%%%%%%%%%%", results)
     return jsonify({"results":results})
+    #return jsonify(results)
+
+
+@app.route('/getConceptAPI', methods=['GET', 'POST'])
+def getConceptAPI():
+    errors = []
+    results = [['text','relevance']]
+    url1=''
+    rs1=''
+
+    if 'url' in request.args:
+        url1 = request.args['url']
+        print (url1)
+    try:
+        
+        alchemy_language = AlchemyLanguageV1(api_key='cf58ea656e04426e98c30b9b6fca569b7690d17f')
+        
+        a = json.dumps(alchemy_language.concepts(url=url1),indent=2)
+        b = json.loads(a)['concepts']
+        for i in b:
+           results.append([i['text'],i['relevance']])
+           #print ('3333333333333', results)
+            
+        return  jsonify(results)
+    except:
+            errors.append(
+                "Unable to get URL1. Please make sure it's valid and try again."
+            )
+            return jsonify([{'error':errors}])
 
 if __name__ == '__main__':
     app.run()
