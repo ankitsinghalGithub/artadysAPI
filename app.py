@@ -266,7 +266,7 @@ def getConceptAPI():
         a = json.dumps(alchemy_language.concepts(url=url1),indent=2)
         b = json.loads(a)['concepts']
         for i in b:
-           results.append([i['text'],i['relevance']])
+           results.append([i['text'],float(i['relevance'])])
            #print ('3333333333333', results)
             
         return  jsonify(results)
