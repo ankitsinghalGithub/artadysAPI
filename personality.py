@@ -115,14 +115,4 @@ def getPersonality(text):
 	return results
 
 
-#text1 = "The President of the Republic of India  Bhārat Gaṇarājya Ke Rāṣtrapati) "
-#text1 += "is the Head of State of India and the Commander-in-chief of the Indian Armed Forces."
-#text1 += "President is indirectly elected by the people through elected members of both the houses of" 
-#text1 += " the Parliament of India, the Legislative Assemblies of all the states of India and the Legislative Assembly of the Union Territory of Puducherry, as well as, the Legislative Assembly of the National Capital Territory of Delhi and serves for a renewable term of five years. The oath of the President is taken in the presence of the Chief Justice of India, and in his/her absence, by the most senior judge of the Supreme Court of India.Although the Article 53 of the Constitution of India states that the President can exercise his powers directly or by subordinate authority,[3] with few exceptions, all of the executive authority vested in the President are, in practice, exercised by the Prime Minister with the help of the Council of Ministers."
-#text1 += " The President resides in an estate known as the Rashtrapati Bhavan (which roughly translates as President's House) situated in Raisina Hill in New Delhi. The presidential retreats are The Retreat in Chharabra, Shimla and Rashtrapati Nilayam (President's Place) in Hyderabad."
-#text1 += " The 13th and current President is Pranab Mukherjee, who was elected on 22 July 2012, and sworn in on 25 July 2012.[5][6] He is also the first Bengali to be elected as President"
-
-#print (getPersonality(text1))
-
-
 

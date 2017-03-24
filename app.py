@@ -17,6 +17,9 @@ import pasttweetSent
 import emotion
 import personality
 from watson_developer_cloud import AlchemyLanguageV1
+import subprocess
+import scrapData
+
 
 
 
@@ -276,5 +279,56 @@ def getConceptAPI():
             )
             return jsonify([{'error':errors}])
 
+
+@app.route('/scrapyAPI', methods=['GET', 'POST'])
+def scrapyAPI():
+    errors = []
+    results = {}
+    url=''
+
+    scrapData.data=[]
+    if 'url' in request.args:
+        url = request.args['url']
+        #print (url)
+
+
+    #print (request.method)
+    if request.method == "GET":
+        # get url that the person has entered
+        try:
+        	#print ("1")
+            #url = urlParse
+	        r = requests.get(url)
+	        #print ("2", r)
+        except:
+            errors.append(
+                "Unable to get URL. Please make sure it's valid and try again."
+            )
+            return jsonify([{'error':errors}])
+        if r:
+            # text processing
+            #print ("3")
+            spider_name = "quotes"
+            with open('quotes12.json', 'w'): pass
+            #scrapy runspider quotes_spider.py -o quotes.json
+            subprocess.check_output(['scrapy', 'runspider', 'quotes_spider.py', '-o', 'quotes12.json'])
+            #subprocess.check_output(['scrapy', 'runspider', 'quotes_spider.py'])
+            #rs=scrapData.data
+            
+            with open('quotes12.json') as data_file:  
+                rs = json.load(data_file)
+            #print ("$$$$$$$$$$$$$",type(rs))
+            #rs1 = json.loads(rs)
+            #print ("#######################")
+            #print (rs)
+            
+
+            #print (rs1)
+
+    return  jsonify(rs)
+
 if __name__ == '__main__':
     app.run()
+
+
+
