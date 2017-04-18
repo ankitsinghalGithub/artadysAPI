@@ -77,7 +77,7 @@ def Crawl_web(seed):#The website to act as seed page is given as input
 	crawled=[]
 	index={}
 	graph={}#new graph
-    print ("inside:",seed)
+	print ("inside:",seed)
 	global max_limit
 	while tocrawl:
 		p=tocrawl.pop()
