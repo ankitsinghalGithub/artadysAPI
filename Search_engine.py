@@ -125,6 +125,7 @@ def Look_up_new(index,ranks,keyword):
 def getSearch(sp,st):
         
     seed_page = sp
+	print (sp,st)
     #print "Enter the seed page", seed_page
     #seed_page=raw_input()
 
