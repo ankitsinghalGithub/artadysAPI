@@ -123,30 +123,29 @@ def Look_up_new(index,ranks,keyword):
 
 #print index
 def getSearch(sp,st):
-        
-    seed_page = sp
+	seed_page = sp
 	print (sp,st)
-    #print "Enter the seed page", seed_page
-    #seed_page=raw_input()
+	#print "Enter the seed page", seed_page
+	#seed_page=raw_input()
 
-    search_term =st
-    #print "Enter What you want to search"
-    #search_term=raw_input()
+	search_term =st
+	#print "Enter What you want to search"
+	#search_term=raw_input()
 
-    max_limit = 10
+	max_limit = 10
 
-    #try:
-    #	print "Enter the depth you wanna go"
-    #	max_limit=int(raw_input())
-    #except:
-    #	f=None
+	#try:
+	#	print "Enter the depth you wanna go"
+	#	max_limit=int(raw_input())
+	#except:
+	#	f=None
 
-    #print ('\nStarted crawling, presently at depth..',seed_page, search_term)
-    crawled,index,graph=Crawl_web(seed_page)#printing all the links
-    ranks=compute_ranks(graph)#Calculating the page ranks
-    results = Look_up_new(index,ranks,search_term)
-    #print (results)
-    return (results)
+	#print ('\nStarted crawling, presently at depth..',seed_page, search_term)
+	crawled,index,graph=Crawl_web(seed_page)#printing all the links
+	ranks=compute_ranks(graph)#Calculating the page ranks
+	results = Look_up_new(index,ranks,search_term)
+	#print (results)
+	return (results)
 	
 		
 
