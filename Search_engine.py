@@ -83,7 +83,7 @@ def Crawl_web(seed):#The website to act as seed page is given as input
 		p=tocrawl.pop()
 		if p not in crawled:#To remove the looping, if a page is already crawled and it is backlinked again by someother link we are crawling, we need not crawl it again
 			max_limit-=1
-			print max_limit
+			#print max_limit
 			if max_limit<=0:
 				break
 			c=get_page(p)
@@ -109,9 +109,9 @@ def QuickSort(pages,ranks):#Sorting in descending order
 
 def Look_up_new(index,ranks,keyword):
 	pages=Look_up(index,keyword)
-	print '\nPrinting the results as is with page rank\n'
-	for i in pages:
-		print i+" --> "+str(ranks[i])#Displaying the lists, so that you can see the page rank along side
+	#print '\nPrinting the results as is with page rank\n'
+	#for i in pages:
+	#	print i+" --> "+str(ranks[i])#Displaying the lists, so that you can see the page rank along side
 	QuickSort(pages,ranks)
 	#print "\nAfter Sorting the results by page rank\n"
 	#it=0
@@ -140,11 +140,11 @@ def getSearch(sp,st):
     #except:
     #	f=None
 
-    print ('\nStarted crawling, presently at depth..',seed_page, search_term)
+    #print ('\nStarted crawling, presently at depth..',seed_page, search_term)
     crawled,index,graph=Crawl_web(seed_page)#printing all the links
     ranks=compute_ranks(graph)#Calculating the page ranks
     results = Look_up_new(index,ranks,search_term)
-    print (results)
+    #print (results)
     return (results)
 	
 		
