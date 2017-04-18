@@ -19,7 +19,7 @@ import personality
 from watson_developer_cloud import AlchemyLanguageV1
 import subprocess
 import scrapData
-
+import Search_engine
 
 
 
@@ -326,6 +326,46 @@ def scrapyAPI():
             #print (rs1)
 
     return  jsonify(rs)
+
+@app.route('/searchengineAPI', methods=['GET', 'POST'])
+def searchengineAPI():
+    errors = []
+    results = {}
+    url=''
+    word=''
+    r=''
+
+    
+    if 'url' in request.args:
+        url = request.args['url']
+        #print (url)
+
+    if 'word' in request.args:
+        word = request.args['word']
+        #print (word)
+
+
+    #print (request.method)
+    if request.method == "GET":
+        # get url that the person has entered
+        try:
+        	
+	        #r = requests.get(search)
+            r= str(url)
+            w = str(word)
+            #print (r, word)
+        except:
+            errors.append(
+                "Unable to get URL. Please make sure it's valid and try again."
+            )
+            return jsonify([{'error':errors}])
+        
+        if (len(r) !=0 and len(w)!=0):
+            rs = Search_engine.getSearch(r,w)
+            
+
+    return  jsonify(rs)
+
 
 if __name__ == '__main__':
     app.run()
