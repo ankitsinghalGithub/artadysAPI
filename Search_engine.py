@@ -77,7 +77,7 @@ def Crawl_web(seed):#The website to act as seed page is given as input
 	crawled=[]
 	index={}
 	graph={}#new graph
-    #print ("inside:",seed)
+    print ("inside:",seed)
 	global max_limit
 	while tocrawl:
 		p=tocrawl.pop()
@@ -109,9 +109,9 @@ def QuickSort(pages,ranks):#Sorting in descending order
 
 def Look_up_new(index,ranks,keyword):
 	pages=Look_up(index,keyword)
-	#print '\nPrinting the results as is with page rank\n'
-	#for i in pages:
-	#	print i+" --> "+str(ranks[i])#Displaying the lists, so that you can see the page rank along side
+	print ('\nPrinting the results as is with page rank\n')
+	for i in pages:
+		print (i+" --> "+str(ranks[i]))#Displaying the lists, so that you can see the page rank along side
 	QuickSort(pages,ranks)
 	#print "\nAfter Sorting the results by page rank\n"
 	#it=0
