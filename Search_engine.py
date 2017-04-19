@@ -77,13 +77,13 @@ def Crawl_web(seed):#The website to act as seed page is given as input
 	crawled=[]
 	index={}
 	graph={}#new graph
-	print ("inside:",seed)
+	#print ("inside:",seed)
 	global max_limit
 	while tocrawl:
 		p=tocrawl.pop()
 		if p not in crawled:#To remove the looping, if a page is already crawled and it is backlinked again by someother link we are crawling, we need not crawl it again
 			max_limit-=1
-			#print max_limit
+			print max_limit
 			if max_limit<=0:
 				break
 			c=get_page(p)
@@ -131,7 +131,7 @@ def getSearch(sp,st):
 	search_term =st
 	#print "Enter What you want to search"
 	#search_term=raw_input()
-
+	global max_limit
 	max_limit = 10
 
 	#try:

@@ -353,7 +353,7 @@ def searchengineAPI():
 	        #r = requests.get(search)
             r= str(url)
             w = str(word)
-            #print (r, word)
+            print (r, w)
         except:
             errors.append(
                 "Unable to get URL. Please make sure it's valid and try again."
