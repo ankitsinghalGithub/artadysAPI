@@ -83,6 +83,7 @@ def Crawl_web(seed):#The website to act as seed page is given as input
 		p=tocrawl.pop()
 		if p not in crawled:#To remove the looping, if a page is already crawled and it is backlinked again by someother link we are crawling, we need not crawl it again
 			max_limit-=1
+			
 			print (max_limit)
 			if max_limit<=0:
 				break
